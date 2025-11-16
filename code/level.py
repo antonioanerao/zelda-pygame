@@ -1,5 +1,6 @@
 import pygame
 from dotenv import load_dotenv
+from random import choice
 from tile import Tile
 from player import Player
 from debug import debug
@@ -19,7 +20,14 @@ class Level:
 
     def create_map(self):
         layouts = {
-            'boundary': support.import_csv_layout('../map/map_FloorBlocks.csv')
+            'boundary': support.import_csv_layout('../map/map_FloorBlocks.csv'),
+            'grass': support.import_csv_layout('../map/map_Grass.csv'),
+            'object': support.import_csv_layout('../map/map_Objects.csv')
+        }
+
+        graphics = {
+            'grass': support.import_folder('../graphics/grass'),
+            'objects': support.import_folder('../graphics/objects'),
         }
 
         for style, layout in layouts.items():
@@ -31,6 +39,12 @@ class Level:
 
                         if style == 'boundary':
                             Tile((x, y), [self.obstables_sprites], 'invisible')
+                        if style == 'grass':
+                            random_grass_image = choice(graphics['grass'])
+                            Tile((x, y), [self.obstables_sprites, self.visible_sprites], 'grass', random_grass_image)
+                        # if style == 'object':
+                        #     surf = graphics['objects'][int(col)]
+                        #     Tile((x, y), [self.obstables_sprites, self.visible_sprites], 'object', surf)
 
         self.player = Player((1920, 1310), [self.visible_sprites], self.obstables_sprites)
 
@@ -49,7 +63,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
 
         # Creating the floor
-        self.floor_surf = pygame.image.load('../graphics/tilemap/ground.png').convert()
+        self.floor_surf = pygame.image.load('../graphics/tilemap/ground_limpo.png').convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):
