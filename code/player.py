@@ -1,4 +1,5 @@
 import pygame
+from support import import_folder
 
 
 class Player(pygame.sprite.Sprite):
@@ -11,6 +12,9 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -26)
 
+        # graphics setup
+        self.import_player_assets()
+
         self.direction = pygame.math.Vector2()
         self.speed = 5
         self.attacking = False
@@ -18,6 +22,16 @@ class Player(pygame.sprite.Sprite):
         self.attack_time = None
 
         self.obstacle_sprites = obstacle_sprites
+
+    def import_player_assets(self):
+        character_path = '../graphics/player/'
+        self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
+                           'up_idle': [], 'down_idle': [], 'left_idle': [], 'right_idle': [],
+                           'up_attack': [], 'down_attack': [], 'left_attack': [], 'right_attack': []}
+
+        for animations in self.animations.keys():
+            full_path = character_path + animations
+            self.animations[animations] = import_folder(full_path)
 
     def input(self):
         keys = pygame.key.get_pressed()
