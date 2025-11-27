@@ -7,6 +7,7 @@ from weapon import Weapon
 from debug import debug
 import support
 import settings
+from ui import UI
 
 load_dotenv()
 
@@ -21,6 +22,9 @@ class Level:
         self.current_attack = None
 
         self.create_map()
+
+        # User interface
+        self.ui = UI()
 
     def create_map(self):
         layouts = {
@@ -62,7 +66,8 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
-        debug(self.player.direction)
+        self.ui.display(self.player)
+        # debug(self.player.direction)
 
 
 class YSortCameraGroup(pygame.sprite.Group):
